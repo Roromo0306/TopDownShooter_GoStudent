@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BuildDisparo
   m_EditorClassIdentifier: 
   tipoPersonaje: 0
-  RitmoDisparo: 10
+  RitmoDisparo: 1
   DanioDisparo: 5
   vidaPersonaje: 5
   velocidad: 5
