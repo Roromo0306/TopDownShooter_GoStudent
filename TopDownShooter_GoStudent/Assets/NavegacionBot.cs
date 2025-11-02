@@ -10,8 +10,9 @@ public class NavegacionBot : MonoBehaviour
 
 
     private DeteccionJugador deteccionJugador;
-    private int indiceActual = 0;
+    public int indiceActual = 0;
     private NavMeshAgent agente;
+    private bool enPatrulla = true;
 
     // Start is called before the first frame update
     void Start()
@@ -23,17 +24,39 @@ public class NavegacionBot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!deteccionJugador.detectado)
+        if(!deteccionJugador.detectado)
         {
+            if (!enPatrulla)
+            {
+                // Reinicia la patrulla desde el punto más cercano
+                indiceActual = ObtenerIndicePuntoMasCercano();
+                agente.SetDestination(puntos[indiceActual].position);
+                enPatrulla = true;
+            }
             Patrulla();
         }
-        else
+    else
         {
             agente.SetDestination(deteccionJugador.jugador.position);
+            enPatrulla = false;
         }
-            
-    }
 
+    }
+    int ObtenerIndicePuntoMasCercano()
+    {
+        float minDist = Mathf.Infinity;
+        int idx = 0;
+        for (int i = 0; i < puntos.Count; i++)
+        {
+            float dist = Vector3.Distance(transform.position, puntos[i].position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                idx = i;
+            }
+        }
+        return idx;
+    }
     void BuscarComponentes()
     {
         
