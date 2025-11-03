@@ -19,36 +19,46 @@ public class ApuntarJugador : MonoBehaviour
     [Header("Giro Curva")]
     public AnimationCurve curvaVelocidad = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
-    private Transform objetivoActual;
+    protected Vector3 objetivoActual;
+    
+    protected virtual void Start()
+    {
+        
+    }
 
-    void Update()
+    protected virtual void Update()
     {
         ActualizarObjetivo();
         GirarHaciaObjetivo();
     }
 
-    void ActualizarObjetivo()
+    protected virtual void ActualizarObjetivo()
     {
+        if (naveBot == null)
+        {
+            return;
+        }
         if (deteccion.detectado && deteccion.jugador != null)
         {
-            objetivoActual = deteccion.jugador; // Apuntar al jugador
+            objetivoActual = deteccion.jugador.position; // Apuntar al jugador
         }
+ 
         else if (naveBot != null && naveBot.puntos.Count > 0)
         {
             int indice = naveBot.indiceActual % naveBot.puntos.Count;
-            objetivoActual = naveBot.puntos[indice]; // Apuntar al punto de patrulla actual
+            objetivoActual = naveBot.puntos[indice].position; // Apuntar al punto de patrulla actual
         }
         else
         {
-            objetivoActual = null;
+            objetivoActual = new Vector3();
         }
     }
 
-    void GirarHaciaObjetivo()
+    protected virtual void GirarHaciaObjetivo()
     {
         if (objetivoActual == null) return;
 
-        Vector3 dir = objetivoActual.position - transform.position;
+        Vector3 dir = objetivoActual - transform.position;
         float angulo = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // -90 si tu sprite apunta "arriba"
 
         switch (modo)

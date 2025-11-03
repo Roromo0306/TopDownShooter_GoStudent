@@ -10,7 +10,7 @@ public class DisparoJugador : MonoBehaviour
     public float velocidadGiro = 5f;
     public Transform puntoDisparo;
     public GameObject bala;
-    public float cooldown = 3f;
+    public float cooldown = 0.2f;
     public Camera camera;
     public float rangoVariacionFrecuencia;
     public AnimationCurve curvaVelocidad = AnimationCurve.EaseInOut(0f, 0f, 1f,1f);
@@ -18,7 +18,7 @@ public class DisparoJugador : MonoBehaviour
 
     private AudioSource disparo;
     private float frecuenciaInicial;
-
+    private bool puedeDisparar = true;
 
     // Start is called before the first frame update
     void Start()
@@ -106,8 +106,21 @@ public class DisparoJugador : MonoBehaviour
 
     void Disparo()
     {
+        if(puedeDisparar == true)
+        {
+            Instantiate(bala, puntoDisparo.position, transform.rotation);
+            puedeDisparar = false;
+            Invoke("puedeDispararTrue", cooldown);
+        }
+        
+
         float variacionPitch = Random.Range(-rangoVariacionFrecuencia, rangoVariacionFrecuencia);
         disparo.pitch = frecuenciaInicial + variacionPitch;
         disparo.Play();
+    }
+
+    void puedeDispararTrue()
+    {
+        puedeDisparar = true;
     }
 }

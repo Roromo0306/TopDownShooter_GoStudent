@@ -11,19 +11,19 @@ public class MoverBala : MonoBehaviour
     private PlayerController player;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         transform.Translate(Vector3.up *  velocidad * Time.deltaTime, Space.Self);
        
     }
 
-    public void OnTriggerEnter2D(Collider2D col)
+     protected virtual void OnTriggerEnter2D(Collider2D col)
     {
         if(col.CompareTag("Player"))
         {
